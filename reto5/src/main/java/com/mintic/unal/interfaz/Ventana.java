@@ -7,10 +7,11 @@ package com.mintic.unal.interfaz;
 import com.mintic.unal.reto5.Reto5Application;
 import java.util.Optional;
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 
 public class Ventana extends JFrame{
-
     public Ventana() {
         initComponents();
         String [] args = {};
@@ -42,15 +43,16 @@ public class Ventana extends JFrame{
             }
         }
 
-        // Crea un panel que sirve de lienzo para el dibujo de la ciudad
-        Tabpanel panelPrincipal = new Tabpanel();
-        // Sirve de panel principal de la ventana
-        setContentPane(panelPrincipal);
-        // Adiciona el panel de controles al panel principal
+        UIManager.put("nimbusBase", new ColorUIResource(Color.BLACK));
+        UIManager.put("textForeground", new ColorUIResource(Color.white));
 
-        // Adjusta el tamaño de la ventana para que quepan todos los componentes
+        Tabpanel panelPrincipal = new Tabpanel();
+        setContentPane(panelPrincipal);
+
         pack();
-        setSize(700, 800);
+        setSize(765, 880);
+        setResizable(false);
+        getContentPane().setBackground(Color.BLACK);
 
         // Permite ubicar la ventana en el centro de la pantalla
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
