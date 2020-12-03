@@ -1,6 +1,6 @@
 package com.mintic.unal.reto5;
 
-import com.mintic.unal.interfaz.Ventana;
+import com.mintic.unal.interfaz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,12 +8,11 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ComponentScan("com.mintic.unal.reto5")
+@ComponentScan("com.mintic.unal")
 public class Reto5Application {
 
 	public static void main(String[] args) {
-
-                new Ventana().setVisible(true);
+            new Ventana().setVisible(true);
 	}
         
         public static void runSpringServer(String[] args) {

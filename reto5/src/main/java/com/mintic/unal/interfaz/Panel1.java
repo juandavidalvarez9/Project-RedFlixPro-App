@@ -1,37 +1,50 @@
+
 package com.mintic.unal.interfaz;
 
-
+import java.io.File;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+import java.util.Optional;
+import com.mintic.unal.modelos.Usuario;
+import com.mintic.unal.repository.UsuarioRepository;
+import com.mintic.unal.reto5.Reto5Application;
+import com.mintic.unal.reto5.SpringContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class Panel1 extends JPanel {
-    final Font labelFont = new Font(Font.MONOSPACED, 1, 20);
-    private JLabel efondo;
-    final JLabel eapodo = new JLabel("Apodo");
-    final JTextField ctapodo = new JTextField();
-    final JButton validarButton = new JButton("Validar");
-    final JLabel enombre = new JLabel("Nombre");
-    final JTextField ctnombre = new JTextField();
-    final JLabel eapellido = new JLabel("Apellido");
-    final JTextField ctapellido = new JTextField();
-    final JLabel email = new JLabel("Email");
-    final JTextField ctmail = new JTextField();
-    final JLabel ecelular = new JLabel("Celular");
-    final JTextField ctcelular = new JTextField();
-    final JLabel econtraseña = new JLabel("Contraseña");
-    final JPasswordField pwpassword = new JPasswordField();
-    final JLabel econfirpassword = new JLabel("<html>Confirmar<br>Contraseña");
-    final JPasswordField pwconfirpassword = new JPasswordField();
-    final JLabel efechan = new JLabel("<html>Fecha<br>Nacimiento");
-    final JTextField ctfechan = new JTextField();
-    final JButton creareditarButton = new JButton("Crear");
-    final JButton eliminar = new JButton("Eliminar");
+public final class Panel1 extends JPanel {
+    
 
     public Panel1(){
-        initcomponents();
+        
+       initcomponents();
+       
+
     }
+    
+    Font labelFont = new Font(Font.MONOSPACED, 0, 20);
+    JLabel efondo;
+    JLabel eapodo = new JLabel("Apodo");
+    JTextField ctapodo = new JTextField();
+    JButton validarButton = new JButton("Validar");
+    JLabel enombre = new JLabel("Nombre");
+    JTextField ctnombre = new JTextField();
+    JLabel eapellido = new JLabel("Apellido");
+    JTextField ctapellido = new JTextField();
+    JLabel email = new JLabel("Email");
+    JTextField ctmail = new JTextField();
+    JLabel ecelular = new JLabel("Celular");
+    JTextField ctcelular = new JTextField();
+    JLabel econtraseña = new JLabel("Contraseña");
+    JPasswordField pwpassword = new JPasswordField();
+    JLabel econfirpassword = new JLabel("<html>Confirmar<br>Contraseña");
+    JPasswordField pwconfirpassword = new JPasswordField();
+    JLabel efechan = new JLabel("<html>Fecha<br>Nacimiento");
+    JTextField ctfechan = new JTextField();
+    JButton creareditarButton = new JButton("Crear");
+    JButton eliminar = new JButton("Eliminar");
+    
     public void initcomponents(){
+        
         setLayout(null);
         ImageIcon img = new ImageIcon("redflix.jpg");
         efondo = new JLabel("",img,JLabel.CENTER);
@@ -142,11 +155,144 @@ public class Panel1 extends JPanel {
         ctfechan.setEnabled(false);
         ctfechan.setForeground(Color.BLACK);
         efondo.add(ctfechan);
-
-
-
-
-
-
+        
+        validarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                validarButtonActionPerformed(evt);
+            }
+        });
+        
+        
     }
+    
+    private void validarButtonActionPerformed(java.awt.event.ActionEvent evt) {         
+       
+        habilitarCampos();
+        if (ctapodo.getText().length()>3) {
+           
+            ctapodo.setEnabled(true);
+            if (consultarUsername()==true) {
+                int resp = JOptionPane.showConfirmDialog(null, "¿Desea modificar el Usuario?", "Modificar User", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                if (resp == 0) {
+                    consultarUsername();
+                }
+            }else{
+                int resp = JOptionPane.showConfirmDialog(null, "¿Desea crear el Usuario con ese USERNAME?", "Crear Usuario", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                if (resp == 0) {
+                    
+                }
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "El Username debe tener almenos 4 caracteres");
+        }
+        
+        
+        /*if(!ctapodo.getText().equals("")){
+            buscarPorId();
+            tfId.setEnabled(true);
+        }
+        else{
+            lbNotificaciones.setText("No ha digitado ningun id");
+        }*/
+    } 
+    
+    public void habilitarCampos() {
+        ctnombre.setEnabled(true);
+        ctapellido.setEnabled(true);
+        ctmail.setEnabled(true);
+        ctcelular.setEnabled(true);
+        ctfechan.setEnabled(true);
+        pwpassword.setEnabled(true);
+    }
+    
+    public void limpiarCamposParaCreacion(){
+        ctapodo.setEnabled(false);
+        ctnombre.setEnabled(false);
+        ctapellido.setText("");
+        ctmail.setText("");
+        ctcelular.setText("");
+        ctfechan.setText("");
+    }
+    
+    public void limpiarCampos(){
+        ctapodo.setEnabled(false);
+        ctnombre.setEnabled(false);
+        ctapellido.setText("");
+        ctmail.setText("");
+        ctcelular.setText("");
+        ctfechan.setText("");
+    }
+     
+    private boolean consultarUsername() {
+        boolean verificar = false;
+        String username = ctapodo.getText();
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(username);
+        if(optionalUsuario.isPresent()){
+            Usuario usuario = optionalUsuario.get();
+            ctnombre.setText(usuario.getNombres());
+            ctapellido.setText(usuario.getApellidos());
+            ctmail.setText(usuario.getEmail());
+            ctcelular.setText(usuario.getCelular());
+            ctfechan.setText(usuario.getFechaNacimiento().toString());
+            verificar = true;
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "El usuario no existe por favor vuelva a intentar.");
+            verificar = false;
+        }
+        return verificar;
+    }
+   
+    public void eliminar(){
+        String username = ctapodo.getText();
+        
+        try{
+            usuarioRepository.deleteById(username);
+            JOptionPane.showMessageDialog(null, "El Usuario " + username + " ha sido eliminado exitosamente.");
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "No puede eliminar un usuario que no existe.");
+        }         
+    }
+    
+     private Usuario extraerDatos(){
+        Usuario usuario = new Usuario();
+        usuario.setNombres(ctnombre.getText());
+        usuario.setApellidos(ctapellido.getText());
+        usuario.setEmail(ctmail.getText());
+        usuario.setCelular(ctcelular.getText());
+        //usuario.setFechaNacimiento(ctfechan.getText());
+        return usuario;
+    }
+    
+    private void generarUsuario() {
+        Usuario usuario = extraerDatos();
+   
+        String username;
+        StringBuffer answer = new StringBuffer();
+        if(ctapodo.getText().equals("")){
+            username = null;
+            answer.append("Usuario creado exitosamente");
+        }
+        else{
+            username = ctapodo.getText();
+            answer.append("Usuario redefinido exitosamente");
+        }
+         
+        usuario.setUserName(username);
+                
+        try{
+            usuarioRepository.save(usuario);
+            answer.append(usuario.getUserName());
+            ctapodo.setText(usuario.getUserName());
+            JOptionPane.showMessageDialog(null, answer);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "No se ha podido guardar el usuario.");
+        }
+       
+    }
+    
 }

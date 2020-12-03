@@ -29,5 +29,6 @@ public class Tabpanel extends JPanel {
         panel1.setOpaque(true);
 
 
+
     }
 }
