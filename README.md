@@ -1,6 +1,6 @@
 # Project-RedFlixPro-App
 
-> **Estado:** proyecto de formación de 2020 (reto 5 del ciclo II), sin mantenimiento. Se conserva como archivo.
+> Proyecto de formación de 2020 (reto 5 del ciclo II).
 
 Aplicación de escritorio en Java para gestionar los usuarios de "RedFlix": permite crear, validar y eliminar usuarios (nombre, apellido, apodo, email, celular, fecha de nacimiento y contraseña) desde una interfaz Swing, guardándolos en MySQL con Spring Boot y JPA.
 
