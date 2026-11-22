@@ -41,8 +41,10 @@ flowchart LR
    export DB_USER=root
    export DB_PASSWORD=tu_clave
    cd reto5
-   ./mvnw spring-boot:run
+   mvn spring-boot:run
    ```
+
+   Necesita Maven instalado: el repositorio no trae la configuración del wrapper (`.mvn/`), así que `./mvnw` no funciona.
 
 ## Estado de esta revisión
 
