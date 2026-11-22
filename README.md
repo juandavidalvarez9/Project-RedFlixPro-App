@@ -48,7 +48,7 @@ flowchart LR
 
 ## Estado de esta revisión
 
-ESTADO_COMPILACION
+El proyecto compila con Java 11 y un flujo de GitHub Actions lo comprueba en cada cambio. Antes de esta revisión no compilaba: `Panel1` usaba un repositorio que no declaraba.
 
 Lo que no se pudo comprobar: la ejecución completa, porque necesita MySQL y un entorno gráfico.
 
@@ -58,7 +58,7 @@ Detectados leyendo el código y sin corregir todavía, porque no se pueden proba
 
 - Las contraseñas se guardan en texto plano en la columna `contraseña`.
 - `Ventana` y `Panel1` repiten casi la misma lógica, y hay dos repositorios idénticos (`UsuarioRepository` y `UsuarioRepository1`).
-- `Panel2` y `Panel3` están vacíos.
+- `Tabpanel`, `Panel1`, `Panel2` y `Panel3` no se usan: la aplicación solo abre `Ventana`. `Panel2` y `Panel3` están vacíos.
 - Spring Boot 2.4 y el conector `mysql-connector-java` ya no reciben actualizaciones.
 - La prueba incluida solo carga el contexto y falla si MySQL no está disponible.
 
