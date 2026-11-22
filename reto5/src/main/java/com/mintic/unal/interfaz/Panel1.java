@@ -14,6 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 public final class Panel1 extends JPanel {
     
 
+    private UsuarioRepository usuarioRepository;
+
+    // El repositorio se pide a Spring la primera vez que se usa: para entonces
+    // el contexto de la aplicación ya está iniciado.
+    private UsuarioRepository repositorio(){
+        if (usuarioRepository == null) {
+            usuarioRepository = SpringContext.getBean(UsuarioRepository.class);
+        }
+        return usuarioRepository;
+    }
+
     public Panel1(){
         
        initcomponents();
@@ -226,7 +237,7 @@ public final class Panel1 extends JPanel {
     private boolean consultarUsername() {
         boolean verificar = false;
         String username = ctapodo.getText();
-        Optional<Usuario> optionalUsuario = usuarioRepository.findById(username);
+        Optional<Usuario> optionalUsuario = repositorio().findById(username);
         if(optionalUsuario.isPresent()){
             Usuario usuario = optionalUsuario.get();
             ctnombre.setText(usuario.getNombres());
@@ -247,7 +258,7 @@ public final class Panel1 extends JPanel {
         String username = ctapodo.getText();
         
         try{
-            usuarioRepository.deleteById(username);
+            repositorio().deleteById(username);
             JOptionPane.showMessageDialog(null, "El Usuario " + username + " ha sido eliminado exitosamente.");
         }
         catch(Exception e)
@@ -283,7 +294,7 @@ public final class Panel1 extends JPanel {
         usuario.setUserName(username);
                 
         try{
-            usuarioRepository.save(usuario);
+            repositorio().save(usuario);
             answer.append(usuario.getUserName());
             ctapodo.setText(usuario.getUserName());
             JOptionPane.showMessageDialog(null, answer);
